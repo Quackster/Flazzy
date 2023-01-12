@@ -180,7 +180,8 @@ namespace Flazzy
             {
                 TagKind.DefineBinaryData => new DefineBinaryDataTag(header, input),
                 TagKind.DefineBitsJPEG3 => new DefineBitsJPEG3(header, input),
-                TagKind.DefineBitsLossless or TagKind.DefineBitsLossless2 => new DefineBitsLosslessTag(header, input),
+                TagKind.DefineBitsLossless => new DefineBitsLosslessTag(header, input),
+                TagKind.DefineBitsLossless2 => new DefineBitsLossless2Tag(header, input),
                 TagKind.DefineFontName => new DefineFontNameTag(header, input),
                 TagKind.DefineSound => new DefineSoundTag(header, input),
                 TagKind.DoABC => new DoABCTag(header, input),

@@ -17,12 +17,11 @@ namespace Flazzy.Tags
         public BitmapFormat Format { get; set; }
         public byte[] CompressedData { get; set; }
         public byte[] UncompressedData { get; set; }
-        public int Version => Kind == TagKind.DefineBitsLossless ? 1 : 2;
 
         private Color[,] _argbMap;
 
-        public DefineBitsLossless2Tag(byte version)
-            : base(version == 1 ? TagKind.DefineBitsLossless : TagKind.DefineBitsLossless2)
+        public DefineBitsLossless2Tag()
+            : base(TagKind.DefineBitsLossless2)
         {
             _argbMap = new Color[0, 0];
             CompressedData = Array.Empty<byte>();
@@ -34,7 +33,7 @@ namespace Flazzy.Tags
             Format = input.ReadByte() switch
             {
                 3 => BitmapFormat.ColorMap8,
-                4 when Version == 1 => BitmapFormat.Rgb15,
+                4 when (int)TagKind.DefineBitsLossless2 == 1 => BitmapFormat.Rgb15,
                 5 => BitmapFormat.Rgb32,
 
                 _ => throw new InvalidDataException("Invalid bitmap format.")
@@ -120,10 +119,10 @@ namespace Flazzy.Tags
             byte format = Format switch
             {
                 BitmapFormat.ColorMap8 => 3,
-                BitmapFormat.Rgb15 when Version == 1 => 4,
+                BitmapFormat.Rgb15 when (int)TagKind.DefineBitsLossless2 == 1 => 4,
                 BitmapFormat.Rgb32 => 5,
 
-                BitmapFormat.Rgb15 when Version == 2 => throw new Exception($"{BitmapFormat.Rgb15} is only supported on {nameof(DefineBitsLosslessTag)} version 1."),
+                BitmapFormat.Rgb15 when (int)TagKind.DefineBitsLossless2 == 2 => throw new Exception($"{BitmapFormat.Rgb15} is only supported on {nameof(DefineBitsLosslessTag)} version 1."),
                 _ => throw new InvalidDataException("Invalid bitmap format.")
             };
 
